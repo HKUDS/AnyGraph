@@ -1,4 +1,4 @@
-# AnyGraph: Graph Foundation Model in the Wild
+<h1 align='center'>AnyGraph: Graph Foundation Model in the Wild</h1>
 
 <div align='center'>
 <a href=''><img src='https://img.shields.io/badge/Paper-green'></a>
