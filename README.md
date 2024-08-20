@@ -37,7 +37,7 @@
 ## Environment Setup
 Download the data files at <a href=''>this link</a>. And fill in your own directories for data storage at function `get_data_files(self)` of class `DataHandler` in the file `data_handler.py`.
 
-Download the pre-trained AnyGraph models from <a href=''>this link</a>, and put it into `Models/`.
+Download the pre-trained AnyGraph models from <a href='https://hkuhk-my.sharepoint.com/:u:/g/personal/lhaoxia_hku_hk/Efmm5TJm0B5EnmYzTqg8GWEB1loKzeIR5tcr3hPIOJDXXA?e=2wMgZC'>this link</a>, and put it into `Models/`.
 
 **Packages**: Our experiments were conducted with the following package versions:
 * python==3.10.13
