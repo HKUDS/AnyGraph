@@ -128,6 +128,7 @@ The statistics for the experimental datasets are presented in the table above. W
 ## Experiments
 
 ### Model Pre-Training Curves
+We present the training logs with respect to epochs below. Each figure contains two curves, each corresponding to two instances of repeated pre-training.
 
 - pretrain_link1
 
