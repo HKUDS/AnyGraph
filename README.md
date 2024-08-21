@@ -1,7 +1,7 @@
 <h1 align='center'>AnyGraph: Graph Foundation Model in the Wild</h1>
 
 <div align='center'>
-<a href=''><img src='https://img.shields.io/badge/Paper-green'></a>
+<a href='https://arxiv.org/pdf/2408.10700'><img src='https://img.shields.io/badge/Paper-PDF-green'></a>
 <!-- <a href=''><img src='https://img.shields.io/badge/公众号-blue' /></a> -->
 <!-- <a href=''><img src='https://img.shields.io/badge/CSDN-orange' /></a> -->
 <img src="https://badges.pufler.dev/visits/hkuds/anygraph?style=flat-square&logo=github">
@@ -17,25 +17,25 @@
 
 **Objectives of AnyGraph:**
 
-- *Structure Heterogeneity*: Addressing distribution shift in graph structural information.
-- *Feature Heterogeneity*: Handling diverse feature representation spaces across graph datasets.
-- *Fast Adaptation*: Efficiently adapting the model to new graph domains.
-- *Scaling Law Emergence*: Performance scales with the amount of data and model parameters.
+- **Structure Heterogeneity**: Addressing distribution shift in graph structural information.
+- **Feature Heterogeneity**: Handling diverse feature representation spaces across graph datasets.
+- **Fast Adaptation**: Efficiently adapting the model to new graph domains.
+- **Scaling Law Emergence**: Performance scales with the amount of data and model parameters.
 
 <br>
 
 **Key Features of AnyGraph:**
 
-- *Graph Mixture-of-Experts (MoE)*: Effectively addresses cross-domain heterogeneity using an array of expert models.
-- *Lightweight Graph Expert Routing Mechanism*: Enables swift adaptation to new datasets and domains.
-- *Adaptive and Efficient Graph Experts*: Custom-designed to handle graphs with a wide range of structural patterns and feature spaces.
-- *Extensively Trained and Tested*: Exhibits strong generalizability over 38 diverse graph datasets, showcasing scaling laws and emergent capabilities.
+- **Graph Mixture-of-Experts (MoE)**: Effectively addresses cross-domain heterogeneity using an array of expert models.
+- **Lightweight Graph Expert Routing Mechanism**: Enables swift adaptation to new datasets and domains.
+- **Adaptive and Efficient Graph Experts**: Custom-designed to handle graphs with a wide range of structural patterns and feature spaces.
+- **Extensively Trained and Tested**: Exhibits strong generalizability over 38 diverse graph datasets, showcasing scaling laws and emergent capabilities.
 
 <img src='imgs/framework_final.jpeg' />
 
 
 ## Environment Setup
-Download the data files at <a href=''>this link</a>. And fill in your own directories for data storage at function `get_data_files(self)` of class `DataHandler` in the file `data_handler.py`.
+Download the data files at <a href=''>this link</a> (will be accessible soon). And fill in your own directories for data storage at function `get_data_files(self)` of class `DataHandler` in the file `data_handler.py`.
 
 Download the pre-trained AnyGraph models from <a href='https://hkuhk-my.sharepoint.com/:u:/g/personal/lhaoxia_hku_hk/Efmm5TJm0B5EnmYzTqg8GWEB1loKzeIR5tcr3hPIOJDXXA?e=2wMgZC'>this link</a>, and put it into `Models/`.
 
@@ -45,11 +45,46 @@ Download the pre-trained AnyGraph models from <a href='https://hkuhk-my.sharepoi
 * numpy==1.23.4
 * scipy==1.9.3
 
-**Device Requirements**: The training and testing of AnyGraph requires only one GPU with 24G memory (e.g. 3090, 4090).
+**Device Requirements**: The training and testing of AnyGraph requires only one GPU with 24G memory (e.g. 3090, 4090). Using larger input graphs may require devices with larger memory.
 
-## Brief Code Structure
-Here is a brief overview of the code structures. The explanations for each directory are enclosed in quotes (##...##). For a more detailed version, please refer to the full version listed at the end of this readme.
-
+## Code Structure
+Here is a brief overview of the code structures. The explanations for each directory are enclosed in quotes (##...##).
+```
+./
+│   ├── .gitignore
+│   ├── README.md
+│   ├── data_handler.py ## load and process data
+│   ├── model.py ## implementation for the model
+│   ├── params.py ## hyperparameters
+│   └── main.py ## main file for pretraining and link prediction
+│   ├── History/ ## training and testing logs
+│   │   ├── pretrain_link1.his
+│   │   └── pretrain_link2.his
+│   ├── Models/ ## pre-trained models
+│   │   └── README.md
+│   ├── Utils/ ## utility function
+│   │   └── TimeLogger.py
+│   ├── imgs/ ## images used in readme
+│   │   ├── ablation.png
+│   │   ├── article cover.png
+│   │   ├── datasets.png
+│   │   ├── framework_final.jpeg
+│   │   ├── framework_final.pdf
+│   │   ├── framework_final.png
+│   │   ├── overall_performance2.png
+│   │   ├── routing.png
+│   │   ├── scaling_law.png
+│   │   ├── training_time.png
+│   │   ├── tuning_steps.png
+│   │   └── overall_performance1.png
+│   ├── node_classification/ ## test code for node classification
+│   │   ├── data_handler.py
+│   │   ├── model.py
+│   │   ├── params.py
+│   │   └── main.py
+│   │   ├── Utils/
+│   │   │   └── TimeLogger.py
+```
 
 ## Usage
 To reproduce the test performance reported in the paper, run the following command lines:
@@ -96,7 +131,16 @@ The statistics for the experimental datasets are presented in the table above. W
 
 - pretrain_link1
 
+<img src='imgs/link1_loss_curve.png' width=31%/>&nbsp;
+<img src='imgs/link1_fullshot_ndcg_curve.png' width=32%/>&nbsp;
+<img src='imgs/link1_zeroshot_ndcg_curve.png' width=32%/>
+
 - pretrain_link2
+
+
+<img src='imgs/link2_loss_curve.png' width=31%/>&nbsp;
+<img src='imgs/link2_fullshot_ndcg_curve.png' width=32%/>&nbsp;
+<img src='imgs/link2_zeroshot_ndcg_curve.png' width=33%/>
 
 ### Overall Performance Comparison
 
@@ -156,3 +200,15 @@ We study the fast adaptation abilities of AnyGraph from two aspects:
 <img src='imgs/tuning_steps.png' width=60% />
 
 <img src='imgs/training_time.png' width=60% />
+
+## Citation
+
+If you find our work useful, please consider citing our paper:
+```
+@article{xia2024anygraph,
+  title={AnyGraph: Graph Foundation Model in the Wild},
+  author={Xia, Lianghao and Huang, Chao},
+  journal={arXiv preprint arXiv:2408.10700},
+  year={2024}
+}
+```
