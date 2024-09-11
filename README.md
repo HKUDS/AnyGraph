@@ -137,16 +137,16 @@ We present the training logs with respect to epochs below. Each figure contains 
 
 - pretrain_link1
 
-<img src='imgs/link1_loss_curve.png' width=31%/>&nbsp;
-<img src='imgs/link1_fullshot_ndcg_curve.png' width=32%/>&nbsp;
-<img src='imgs/link1_zeroshot_ndcg_curve.png' width=32%/>
+<img src='imgs/link1_loss_curve.png' width=57%/>&nbsp;
+<img src='imgs/link1_fullshot_ndcg_curve.png' width=55%/>&nbsp;
+<img src='imgs/link1_zeroshot_ndcg_curve.png' width=55%/>
 
 - pretrain_link2
 
 
-<img src='imgs/link2_loss_curve.png' width=31%/>&nbsp;
-<img src='imgs/link2_fullshot_ndcg_curve.png' width=32%/>&nbsp;
-<img src='imgs/link2_zeroshot_ndcg_curve.png' width=33%/>
+<img src='imgs/link2_loss_curve.png' width=56%/>&nbsp;
+<img src='imgs/link2_fullshot_ndcg_curve.png' width=55%/>&nbsp;
+<img src='imgs/link2_zeroshot_ndcg_curve.png' width=55%/>
 
 ### Overall Performance Comparison
 
