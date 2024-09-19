@@ -255,11 +255,11 @@ class Exp:
         log('Model Saved: %s' % args.save_path)
 
     def load_model(self):
-        ckp = t.load('../../Models/' + args.load_model + '.mod')
+        ckp = t.load('./Models/' + args.load_model + '.mod')
         self.model = ckp['model']
         self.opt = t.optim.Adam(self.model.parameters(), lr=args.lr, weight_decay=0)
 
-        with open('../../History/' + args.load_model + '.his', 'rb') as fs:
+        with open('./History/' + args.load_model + '.his', 'rb') as fs:
             self.metrics = pickle.load(fs)
         log('Model Loaded')
 
