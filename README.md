@@ -34,10 +34,11 @@
 <img src='imgs/framework_final.jpeg' />
 
 ## News
-- [x] Datasets are available now!
-- [x] Pre-trained models are available on huggingface now!
-- [x] Paper is released.
-- [x] Code is released.
+- [x] 2024/09/18 Fix minor bugs on loading and saving path, class names, etc.
+- [x] 2024/09/11 Datasets are available now!
+- [x] 2024/09/11 Pre-trained models are available on huggingface now!
+- [x] 2024/08/20 Paper is released.
+- [x] 2024/08/20 Code is released.
 
 ## Environment Setup
 Download the data files at <a href='https://huggingface.co/datasets/hkuds/AnyGraph_datasets'>this link</a>. And fill in your own directories for data storage at function `get_data_files(self)` of class `DataHandler` in the file `data_handler.py`.
@@ -137,16 +138,15 @@ We present the training logs with respect to epochs below. Each figure contains 
 
 - pretrain_link1
 
-<img src='imgs/link1_loss_curve.png' width=57%/>&nbsp;
-<img src='imgs/link1_fullshot_ndcg_curve.png' width=55%/>&nbsp;
-<img src='imgs/link1_zeroshot_ndcg_curve.png' width=55%/>
+<img src='imgs/link1_loss_curve.png' width=32%/>&nbsp;
+<img src='imgs/link1_fullshot_ndcg_curve.png' width=33%/>&nbsp;
+<img src='imgs/link1_zeroshot_ndcg_curve.png' width=33%/>
 
 - pretrain_link2
 
-
-<img src='imgs/link2_loss_curve.png' width=56%/>&nbsp;
-<img src='imgs/link2_fullshot_ndcg_curve.png' width=55%/>&nbsp;
-<img src='imgs/link2_zeroshot_ndcg_curve.png' width=55%/>
+<img src='imgs/link2_loss_curve.png' width=32%/>&nbsp;
+<img src='imgs/link2_fullshot_ndcg_curve.png' width=33%/>&nbsp;
+<img src='imgs/link2_zeroshot_ndcg_curve.png' width=33%/>
 
 ### Overall Performance Comparison
 
