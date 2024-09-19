@@ -55,7 +55,7 @@ class DataHandler:
         self.load_data()
     
     def get_data_files(self):
-        predir = f'/home/akaxia/data/zero-shot datasets/node_data/{self.data_name}/'
+        predir = f'/home/user_name/data/zero-shot datasets/node_data/{self.data_name}/'
         # predir = f'../handle_node_data/{self.data_name}/'
         if os.path.exists(predir + 'feats.pkl'):
             self.feat_file = predir + 'feats.pkl'
