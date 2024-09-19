@@ -285,9 +285,9 @@ class Expert(nn.Module):
         t.cuda.empty_cache()
         return score
 
-class AutoGraph(nn.Module):
+class AnyGraph(nn.Module):
     def __init__(self):
-        super(AutoGraph, self).__init__()
+        super(AnyGraph, self).__init__()
         self.experts = nn.ModuleList([Expert() for _ in range(args.expert_num)]).cuda()
         self.opts = list(map(lambda expert: t.optim.Adam(expert.parameters(), lr=args.lr, weight_decay=0), self.experts))
 
