@@ -77,8 +77,7 @@ class DataHandler:
             with open(filename, 'rb') as fs:
                 feats = pickle.load(fs)
         except Exception as e:
-            print(filename + str(e))
-            exit()
+            raise RuntimeError(f'Failed to load features from {filename}') from e
         return feats
 
     def normalize_adj(self, mat, log=False):
