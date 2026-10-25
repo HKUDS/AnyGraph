@@ -227,8 +227,8 @@ class DataHandler:
                 tem_adj = self.trn_input_adj.to(args.devices[0])
                 mem_cache = 256
                 projectors_list = []
-                for i in range(feats.shape[1] // mem_cache):
-                    st, ed = i * mem_cache, (i + 1) * mem_cache
+                for st in range(0, feats.shape[1], mem_cache):
+                    ed = min(st + mem_cache, feats.shape[1])
                     tem_feats = (feats[:, st:ed] - mean) / (std + 1e-8)
                     tem_feats = self.topo_encoder(tem_adj, tem_feats.to(args.devices[0]), normed=True).detach().cpu()
                     projectors_list.append(tem_feats)
