@@ -28,7 +28,7 @@ def parse_args():
     parser.add_argument('--head', default=4, type=int, help='number of attention heads')
     parser.add_argument('--anchor', default=256, type=int, help='number of anchor nodes in the compressed graph transformer')
     parser.add_argument('--act', default='relu', type=str, help='activation function')
-    parser.add_argument('--dataset_setting', default='training', type=str, help='which set of datasets to use')
+    parser.add_argument('--dataset_setting', '--dataset', dest='dataset_setting', required=True, type=str, help='which set of datasets to use')
     parser.add_argument('--assignment', default='top1', type=str, help='assigning method')
     parser.add_argument('--scale_layer', default=10, type=float, help='per-layer scale factor')
     parser.add_argument('--leaky', default=0.5, type=float, help='slope of leaky relu activation')
