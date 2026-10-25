@@ -198,10 +198,12 @@ class Exp:
             self.model.eval()
             expert = self.model.summon(dataset_id)
             ep_recall, ep_ndcg = 0, 0
-            ep_tstnum = len(tst_loader.dataset)
-            steps = max(ep_tstnum // args.tst_batch, 1)
+            steps = len(tst_loader)
+            if args.tst_steps > 0:
+                steps = min(steps, args.tst_steps)
+            ep_tstnum = 0
             for i, batch_data in enumerate(tst_loader):
-                if args.tst_steps != -1 and i > args.tst_steps:
+                if args.tst_steps > 0 and i >= args.tst_steps:
                     break
 
                 usrs = batch_data.long()
@@ -213,10 +215,9 @@ class Exp:
                 recall, ndcg = self.calc_recall_ndcg(top_locs, tst_loader.dataset.tstLocs, usrs)
                 ep_recall += recall
                 ep_ndcg += ndcg
+                ep_tstnum += usrs.shape[0]
                 log('Steps %d/%d: recall = %.2f, ndcg = %.2f          ' % (i, steps, recall, ndcg), save=False, oneline=True)
         ret = dict()
-        if args.tst_steps != -1:
-            ep_tstnum = args.tst_steps * args.tst_batch
         ret['Recall'] = ep_recall / ep_tstnum
         ret['NDCG'] = ep_ndcg / ep_tstnum
         ret['tstNum'] = ep_tstnum

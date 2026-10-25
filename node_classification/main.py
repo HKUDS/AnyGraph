@@ -239,7 +239,11 @@ class Exp:
             expert = self.model.summon(dataset_id)
             ep_acc, ep_tot = 0, 0
             steps = len(tst_loader)
+            if args.tst_steps > 0:
+                steps = min(steps, args.tst_steps)
             for i, batch_data in enumerate(tst_loader):
+                if args.tst_steps > 0 and i >= args.tst_steps:
+                    break
                 nodes, labels = list(map(lambda x: x.long().cuda(), batch_data))
                 feats = handler.projectors
                 preds = expert.pred_for_node_test(nodes, class_num, feats, rerun_embed=False if i!=0 else True)

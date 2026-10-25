@@ -39,5 +39,8 @@ def parse_args():
     parser.add_argument('--nn', default='mlp', type=str, help='what trainable network to use')
     parser.add_argument('--proj_trn_steps', default=100, type=int, help='number of training steps for one initial projection')
     parser.add_argument('--attempt_cache', default=10000000, type=int, help='number of training steps for one initial projection')
-    return parser.parse_args()
+    args = parser.parse_args()
+    if args.tst_steps == 0 or args.tst_steps < -1:
+        parser.error('--tst_steps must be -1 or a positive integer')
+    return args
 args = parse_args()

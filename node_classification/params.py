@@ -1,5 +1,14 @@
 import argparse
 
+def parse_tst_steps(value):
+    try:
+        steps = int(value)
+    except ValueError as error:
+        raise argparse.ArgumentTypeError('must be -1 or a positive integer') from error
+    if steps == -1 or steps > 0:
+        return steps
+    raise argparse.ArgumentTypeError('must be -1 or a positive integer')
+
 def parse_args():
     parser = argparse.ArgumentParser(description='Model Parameters')
     parser.add_argument('--lr', default=1e-4, type=float, help='learning rate')
@@ -18,7 +27,7 @@ def parse_args():
     parser.add_argument('--eval_loss', default=True, type=bool, help='whether use CE loss to evaluate test performance')
     parser.add_argument('--ratio_fewshot_set', default=0.5, type=float, help='ratio of fewshot set')
     parser.add_argument('--shot', default=5, type=int, help='number of shots for each node')
-    parser.add_argument('--tst_steps', default=-1, type=int, help='number of test steps, -1 indicates all')
+    parser.add_argument('--tst_steps', default=-1, type=parse_tst_steps, help='number of test steps, -1 indicates all')
 
     parser.add_argument('--reg', default=1e-7, type=float, help='weight decay regularizer')
     parser.add_argument('--latdim', default=512, type=int, help='latent dimensionality')
