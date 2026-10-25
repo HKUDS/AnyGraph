@@ -126,7 +126,7 @@ class Feat_Projector(nn.Module):
         return decom_feats.cpu()
     
     def uniform_proj(self, feats):
-        projection = init(t.empty(args.featdim, args.latdim))
+        projection = init(t.empty(feats.shape[1], args.latdim))
         return feats @ projection
     
     def random_proj(self, feats):
