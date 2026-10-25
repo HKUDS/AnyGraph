@@ -220,8 +220,6 @@ class Exp:
                 ep_ndcg += ndcg
                 log('Steps %d/%d: recall = %.2f, ndcg = %.2f          ' % (i, steps, recall, ndcg), save=False, oneline=True)
         ret = dict()
-        if args.tst_steps != -1:
-            ep_tstnum = args.tst_steps * args.tst_batch
         ret['Recall'] = ep_recall / ep_tstnum
         ret['NDCG'] = ep_ndcg / ep_tstnum
         ret['tstNum'] = ep_tstnum
