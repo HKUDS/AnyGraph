@@ -11,6 +11,11 @@ import os
 import setproctitle
 import time
 
+
+def _training_step_count(loader_length, step_limit):
+    return min(loader_length, step_limit) if step_limit > 0 else loader_length
+
+
 class Exp:
     def __init__(self, multi_handler):
         self.multi_handler = multi_handler
@@ -142,7 +147,7 @@ class Exp:
         trn_loader = self.multi_handler.joint_trn_loader
         trn_loader.dataset.neg_sampling()
         ep_loss, ep_preloss, ep_regloss = 0, 0, 0
-        steps = len(trn_loader)
+        steps = _training_step_count(len(trn_loader), args.epoch_max_step)
         tot_samp_num = 0
         counter = [0] * len(self.multi_handler.trn_handlers)
         reassign_steps = sum(list(map(lambda x: x.reproj_steps, self.multi_handler.trn_handlers)))
