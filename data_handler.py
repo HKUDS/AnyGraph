@@ -267,7 +267,7 @@ class TrnData(data.Dataset):
         self.neg_sampling()
     
     def neg_sampling(self):
-        self.negs = np.random.randint(self.cand_num + self.neg_shift, size=self.poss.shape[0])
+        self.negs = np.random.randint(self.neg_shift, self.cand_num + self.neg_shift, size=self.poss.shape[0])
 
     def __len__(self):
         return len(self.ancs)
