@@ -1,5 +1,14 @@
 import argparse
 
+
+def parse_bool(value):
+    normalized = value.lower()
+    if normalized in ('true', '1', 'yes', 'y'):
+        return True
+    if normalized in ('false', '0', 'no', 'n'):
+        return False
+    raise argparse.ArgumentTypeError(f'Expected a boolean value, got {value!r}')
+
 def parse_args():
     parser = argparse.ArgumentParser(description='Model Parameters')
     parser.add_argument('--lr', default=1e-4, type=float, help='learning rate')
