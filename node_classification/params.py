@@ -1,5 +1,14 @@
 import argparse
 
+
+def parse_bool(value):
+    normalized = value.lower()
+    if normalized in ('true', '1', 'yes', 'y'):
+        return True
+    if normalized in ('false', '0', 'no', 'n'):
+        return False
+    raise argparse.ArgumentTypeError(f'Expected a boolean value, got {value!r}')
+
 def parse_args():
     parser = argparse.ArgumentParser(description='Model Parameters')
     parser.add_argument('--lr', default=1e-4, type=float, help='learning rate')
@@ -15,7 +24,7 @@ def parse_args():
     parser.add_argument('--epoch_max_step', default=-1, type=int, help='indicates the maximum number of steps in one epoch, -1 denotes full steps')
     parser.add_argument('--trn_mode', default='train-all', type=str, help='[fewshot, train-all]')
     parser.add_argument('--tst_mode', default='tst', type=str, help='[tst, val]')
-    parser.add_argument('--eval_loss', default=True, type=bool, help='whether use CE loss to evaluate test performance')
+    parser.add_argument('--eval_loss', default=True, type=parse_bool, help='whether to report cross-entropy loss during test evaluation')
     parser.add_argument('--ratio_fewshot_set', default=0.5, type=float, help='ratio of fewshot set')
     parser.add_argument('--shot', default=5, type=int, help='number of shots for each node')
     parser.add_argument('--tst_steps', default=-1, type=int, help='number of test steps, -1 indicates all')

@@ -237,12 +237,18 @@ class Exp:
             class_num = tst_loader.dataset.class_num
             self.model.eval()
             expert = self.model.summon(dataset_id)
-            ep_acc, ep_tot = 0, 0
+            ep_acc, ep_tot, ep_loss = 0, 0, 0.0
             steps = len(tst_loader)
             for i, batch_data in enumerate(tst_loader):
                 nodes, labels = list(map(lambda x: x.long().cuda(), batch_data))
                 feats = handler.projectors
-                preds = expert.pred_for_node_test(nodes, class_num, feats, rerun_embed=False if i!=0 else True)
+                rerun_embed = i == 0
+                if args.eval_loss:
+                    logits = expert.pred_for_node_test(nodes, class_num, feats, rerun_embed=rerun_embed, return_logits=True)
+                    preds = t.argmax(logits, dim=-1)
+                    ep_loss += t.nn.functional.cross_entropy(logits, labels, reduction='sum').item()
+                else:
+                    preds = expert.pred_for_node_test(nodes, class_num, feats, rerun_embed=rerun_embed)
                 if i == 0:
                     all_preds, all_labels = preds, labels
                 else:
@@ -255,6 +261,8 @@ class Exp:
         ret = dict()
         ret['Acc'] = ep_acc / ep_tot
         ret['F1'] = f1_score(all_labels.cpu().numpy(), all_preds.cpu().numpy(), average='macro')
+        if args.eval_loss:
+            ret['Loss'] = ep_loss / ep_tot
         ret['tstNum'] = ep_tot
         t.cuda.empty_cache()
         return ret

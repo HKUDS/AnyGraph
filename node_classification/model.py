@@ -249,15 +249,17 @@ class Expert(nn.Module):
         all_preds = anc_embeds @ cand_embeds.T * (1 - dense_mat) - dense_mat * 1e8
         return all_preds
     
-    def pred_for_node_test(self, nodes, cand_size, feats, rerun_embed=True):
+    def pred_for_node_test(self, nodes, cand_size, feats, rerun_embed=True, return_logits=False):
         if rerun_embed:
             final_embeds = self.forward(feats)
             self.final_embeds = final_embeds
         final_embeds = self.final_embeds
         anc_embeds = final_embeds[nodes]
         class_embeds = final_embeds[-cand_size:]
-        preds = anc_embeds @ class_embeds.T
-        return t.argmax(preds, dim=-1)
+        logits = anc_embeds @ class_embeds.T
+        if return_logits:
+            return logits
+        return t.argmax(logits, dim=-1)
 
     def attempt(self, topo_embeds, dataset):
         final_embeds = self.trainable_nn(topo_embeds)
