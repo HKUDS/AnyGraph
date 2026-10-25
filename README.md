@@ -41,7 +41,7 @@
 - [x] 2024/08/20 Code is released.
 
 ## Environment Setup
-Download the data files at <a href='https://huggingface.co/datasets/hkuds/AnyGraph_datasets'>this link</a>. And fill in your own directories for data storage at function `get_data_files(self)` of class `DataHandler` in the file `data_handler.py`.
+Download the data files at <a href='https://huggingface.co/datasets/hkuds/AnyGraph_datasets'>this link</a>. For link-prediction and pretraining, configure the storage directory in `get_data_files(self)` of the root `data_handler.py`. The node-classification command uses a separate `DataHandler` in `node_classification/data_handler.py`; configure its `get_data_files(self)` path for the `node_data/<dataset>/` files as well (`trn_mat.pkl`, `tst_mat.pkl`, and optional `feats.pkl`).
 
 Download the pre-trained AnyGraph models at <a href='https://huggingface.co/hkuds/AnyGraph/'>hugging face</a> or <a href='https://hkuhk-my.sharepoint.com/:u:/g/personal/lhaoxia_hku_hk/Efmm5TJm0B5EnmYzTqg8GWEB1loKzeIR5tcr3hPIOJDXXA?e=2wMgZC'>one drive</a>, and put it into `Models/`.
 
