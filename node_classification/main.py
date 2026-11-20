@@ -12,6 +12,11 @@ import setproctitle
 import time
 from sklearn.metrics import f1_score
 
+
+def _training_step_count(loader_length, step_limit):
+    return min(loader_length, step_limit) if step_limit > 0 else loader_length
+
+
 class Exp:
     def __init__(self, multi_handler):
         self.multi_handler = multi_handler
@@ -20,7 +25,7 @@ class Exp:
             print(f'Test group {group_id}', list(map(lambda x: x.data_name, tst_handlers)))
         self.metrics = dict()
         trn_mets = ['Loss', 'preLoss']
-        tst_mets = ['Recall', 'NDCG', 'Loss', 'preLoss']
+        tst_mets = ['Acc', 'F1', 'Loss', 'preLoss']
         mets = trn_mets + tst_mets
         for met in mets:
             if met in trn_mets:
@@ -49,8 +54,11 @@ class Exp:
         stloc = 0
         if args.load_model != None:
             self.load_model()
+            for group_id in range(len(self.multi_handler.tst_handlers_group)):
+                for metric in ('Acc', 'F1'):
+                    self.metrics.setdefault(f'Test{group_id}{metric}', [])
             stloc = len(self.metrics['TrainLoss']) * args.tst_epoch - (args.tst_epoch - 1)
-        best_ndcg, best_ep = 0, -1
+        best_f1, best_ep = 0, -1
         early_stop = False
         for ep in range(stloc, args.epoch):
             tst_flag = (ep % args.tst_epoch == 0)
@@ -65,25 +73,25 @@ class Exp:
                 for handler_group_id in range(len(self.multi_handler.tst_handlers_group)):
                     tst_handlers = self.multi_handler.tst_handlers_group[handler_group_id]
                     self.model.assign_experts(tst_handlers, reca=False, log_assignment=True)
-                    recall, ndcg, tstnum = 0, 0, 0
+                    accuracy, f1, tstnum = 0, 0, 0
                     for i, handler in enumerate(tst_handlers):
                         reses = self.test_epoch(handler, i)
                         log(self.make_print('handler.data_name', ep, reses, False))
-                        recall += reses['Recall'] * reses['tstNum']
-                        ndcg += reses['NDCG'] * reses['tstNum']
+                        accuracy += reses['Acc'] * reses['tstNum']
+                        f1 += reses['F1'] * reses['tstNum']
                         tstnum += reses['tstNum']
-                    reses = {'Recall': recall / tstnum, 'NDCG': ndcg / tstnum}
+                    reses = {'Acc': accuracy / tstnum, 'F1': f1 / tstnum}
                     log(self.make_print('Test'+str(handler_group_id), ep, reses, tst_flag))
 
-                    if reses['NDCG'] > best_ndcg:
-                        best_ndcg = reses['NDCG']
+                    if reses['F1'] > best_f1:
+                        best_f1 = reses['F1']
                         best_ep = ep
                 self.save_history()
             print()
 
         for test_group_id in range(len(self.multi_handler.tst_handlers_group)):
             repeat_times = 10
-            overall_recall, overall_ndcg = np.zeros(repeat_times), np.zeros(repeat_times)
+            overall_acc, overall_f1 = np.zeros(repeat_times), np.zeros(repeat_times)
             overall_tstnum = 0
             tst_handlers = self.multi_handler.tst_handlers_group[test_group_id]
             if args.assignment == 'one-graph-one-expert':
@@ -107,17 +115,17 @@ class Exp:
                         tot_reses[met + '_std'] = tem_arr.std()
                         tot_reses[met + '_mean'] = tem_arr.mean()
                     
-                    overall_recall += np.array(mets['Acc']) * tstnum
-                    overall_ndcg += np.array(mets['F1']) * tstnum
+                    overall_acc += np.array(mets['Acc']) * tstnum
+                    overall_f1 += np.array(mets['F1']) * tstnum
                     overall_tstnum += tstnum
                     log(self.make_print(f'Test', args.epoch, tot_reses, False, handler.data_name))
-            overall_recall /= overall_tstnum
-            overall_ndcg /= overall_tstnum
+            overall_acc /= overall_tstnum
+            overall_f1 /= overall_tstnum
             overall_res = dict()
-            overall_res['Recall_mean'] = overall_recall.mean()
-            overall_res['Recall_std'] = overall_recall.std()
-            overall_res['NDCG_mean'] = overall_ndcg.mean()
-            overall_res['NDCG_std'] = overall_ndcg.std()
+            overall_res['Acc_mean'] = overall_acc.mean()
+            overall_res['Acc_std'] = overall_acc.std()
+            overall_res['F1_mean'] = overall_f1.mean()
+            overall_res['F1_std'] = overall_f1.std()
             log(self.make_print('Overall Test', args.epoch, overall_res, False))
         self.save_history()
 
@@ -146,7 +154,7 @@ class Exp:
         trn_loader = self.multi_handler.joint_trn_loader
         trn_loader.dataset.neg_sampling()
         ep_loss, ep_preloss, ep_regloss = 0, 0, 0
-        steps = len(trn_loader)
+        steps = _training_step_count(len(trn_loader), args.epoch_max_step)
         tot_samp_num = 0
         counter = [0] * len(self.multi_handler.trn_handlers)
         reassign_steps = sum(list(map(lambda x: x.reproj_steps, self.multi_handler.trn_handlers)))

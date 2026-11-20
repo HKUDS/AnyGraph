@@ -1,5 +1,14 @@
 import argparse
 
+
+def parse_bool(value):
+    normalized = value.lower()
+    if normalized in ('true', '1', 'yes', 'y'):
+        return True
+    if normalized in ('false', '0', 'no', 'n'):
+        return False
+    raise argparse.ArgumentTypeError(f'Expected a boolean value, got {value!r}')
+
 def parse_args():
     parser = argparse.ArgumentParser(description='Model Parameters')
     parser.add_argument('--lr', default=1e-4, type=float, help='learning rate')
@@ -28,7 +37,7 @@ def parse_args():
     parser.add_argument('--head', default=4, type=int, help='number of attention heads')
     parser.add_argument('--anchor', default=256, type=int, help='number of anchor nodes in the compressed graph transformer')
     parser.add_argument('--act', default='relu', type=str, help='activation function')
-    parser.add_argument('--dataset_setting', default='training', type=str, help='which set of datasets to use')
+    parser.add_argument('--dataset_setting', '--dataset', dest='dataset_setting', required=True, type=str, help='which set of datasets to use')
     parser.add_argument('--assignment', default='top1', type=str, help='assigning method')
     parser.add_argument('--scale_layer', default=10, type=float, help='per-layer scale factor')
     parser.add_argument('--leaky', default=0.5, type=float, help='slope of leaky relu activation')

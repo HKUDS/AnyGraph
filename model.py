@@ -10,6 +10,11 @@ from time import time
 init = nn.init.xavier_uniform_
 uniformInit = nn.init.uniform_
 
+
+def _attempt_sample_indices(rows, count):
+    return t.randperm(rows.shape[0], device=rows.device)[:count]
+
+
 class FeedForwardLayer(nn.Module):
     def __init__(self, in_feat, out_feat, bias=True, act=None):
         super(FeedForwardLayer, self).__init__()
@@ -125,7 +130,7 @@ class Feat_Projector(nn.Module):
         return decom_feats.cpu()
     
     def uniform_proj(self, feats):
-        projection = init(t.empty(args.featdim, args.latdim))
+        projection = init(t.empty(feats.shape[1], args.latdim))
         return feats @ projection
     
     def random_proj(self, feats):
@@ -252,8 +257,7 @@ class Expert(nn.Module):
         final_embeds = self.trainable_nn(topo_embeds)
         rows, cols, negs = list(map(lambda x: t.from_numpy(x).long().to(args.devices[1]), [dataset.ancs, dataset.poss, dataset.negs]))
         if rows.shape[0] > args.attempt_cache:
-            random_perm = t.randperm(rows.shape[0], device=args.devices[0])
-            pck_perm = random_perm[:args.attempt_cache]
+            pck_perm = _attempt_sample_indices(rows, args.attempt_cache)
             rows = rows[pck_perm]
             cols = cols[pck_perm]
             negs = negs[pck_perm]
@@ -266,8 +270,7 @@ class Expert(nn.Module):
                 break
             except Exception:
                 args.attempt_cache = args.attempt_cache // 2
-                random_perm = t.randperm(rows.shape[0], device=args.devices[0])
-                pck_perm = random_perm[:args.attempt_cache]
+                pck_perm = _attempt_sample_indices(rows, args.attempt_cache)
                 rows = rows[pck_perm]
                 cols = cols[pck_perm]
                 negs = negs[pck_perm]
